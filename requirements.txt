@@ -1,0 +1,3 @@
+ selenium==4.15.2
+pytest==7.4.3
+webdriver-manager==4.0.1  # Для авто-установки chromedriver

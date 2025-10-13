@@ -1,0 +1,27 @@
+# Python cache / compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test and logs
+*.log
+*.pytest_cache/
+.cache/
+
+# Virtual environments
+.env
+.venv/
+env/
+venv/
+
+# IDE / Editor folders
+.idea/
+.vscode/
+*.iml
+
+# Mac OS system files
+.DS_Store
+
+# Local configs
+*.local
+*.cfg
