@@ -1,4 +1,4 @@
-from pages.models_vehicles import ModelsVehicles
+from pages.General_spravochniki.models_vehicles import ModelsVehicles
 import time
 
 def test_add_models_vehicles(authorized_driver):

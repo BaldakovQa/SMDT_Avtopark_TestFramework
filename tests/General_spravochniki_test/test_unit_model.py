@@ -1,9 +1,5 @@
-import pytest
 import time
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from pages.model_units import GenHandbookPage
+from pages.General_spravochniki.model_units import GenHandbookPage
 
 
 def test_archive_model_unit(authorized_driver, created_model):

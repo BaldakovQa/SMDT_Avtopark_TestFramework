@@ -60,21 +60,15 @@ class ModelsEquipments:
         time.sleep(1)
 
     def open_archive_model(self):
+
         wait = self.wait
-
-
         wait.until(EC.element_to_be_clickable(
-            (By.XPATH, "(//button[contains(@class,'ant-btn-primary') and contains(.,'Фильтры')])[1]")
-        )).click()
-
+            (By.XPATH, "(//button[contains(@class,'ant-btn-primary') and contains(.,'Фильтры')])[1]"))).click()
         # Кликаем по полю "Статус"
         wait.until(EC.visibility_of_element_located((By.XPATH, "(//div[@class='ant-select-selector'])[2]"))).click()
-
         # Выбираем значение "Архивный"
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@title='Архив']"))).click()
-
         # Нажимаем "Применить"
-        wait.until(EC.element_to_be_clickable(
-            (By.XPATH, "//button[.//span[text()='Применить']]")
-        )).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Применить']]"))).click()
+        time.sleep(3)
         print("✅Мыв архиве")

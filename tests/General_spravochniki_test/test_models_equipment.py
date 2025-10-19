@@ -1,8 +1,6 @@
 import time
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from pages.models_equipments import ModelsEquipments
-from selenium.webdriver.support import expected_conditions as EC
+from pages.General_spravochniki.models_equipments import ModelsEquipments
+
 
 def test_add_types_unit(authorized_driver):
     page = ModelsEquipments(authorized_driver)

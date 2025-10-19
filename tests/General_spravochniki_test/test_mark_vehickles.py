@@ -1,8 +1,4 @@
-import time
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-
-from pages.marks_vehicles import MarksVehicle
+from pages.General_spravochniki.marks_vehicles import MarksVehicle
 
 def test_add_mark_vehicle(authorized_driver):
     page = MarksVehicle(authorized_driver)

@@ -1,7 +1,7 @@
 import time
 
 from selenium.webdriver.common.by import By
-from pages.types_units import HandbookPage
+from pages.General_spravochniki.types_units import HandbookPage
 from selenium.webdriver.support import expected_conditions as EC
 
 def test_add_types_unit(authorized_driver):
