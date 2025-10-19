@@ -1,8 +1,7 @@
-import pytest
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from pages.registration_page import RegPage
-from config import Config
+from pages.General_spravochniki.registration_page import RegPage
+
 
 def test_success_registration(driver):
     """Проверка успешной регистрации нового пользователя"""

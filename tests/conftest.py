@@ -1,6 +1,6 @@
 from datetime import datetime
-from pages.model_units import GenHandbookPage
-from pages.types_units import HandbookPage
+from pages.General_spravochniki.model_units import GenHandbookPage
+from pages.General_spravochniki.types_units import HandbookPage
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
