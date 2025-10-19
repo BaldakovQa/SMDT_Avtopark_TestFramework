@@ -24,7 +24,7 @@ class ModelsEquipments:
         wait = self.wait
         # Генерируем имя, если не передано
         if equip_model_name is None:
-            equip_model_name = f"Агрегат_{int(time.time())}"
+            equip_model_name = f"Имя Модели_{int(time.time())}"
 
             #Клик на кнопку добавить
             wait.until(EC.element_to_be_clickable(
