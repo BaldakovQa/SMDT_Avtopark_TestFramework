@@ -7,3 +7,4 @@ def test_add_models_vehicles(authorized_driver):
     print("✅ Мы перешли в раздел 'Модели транспортных средств'")
     page.add_models_vehicle("Test vehicle_model " + str(int(time.time())))
     time.sleep(2)
+#тест не готов, баг на вебе
