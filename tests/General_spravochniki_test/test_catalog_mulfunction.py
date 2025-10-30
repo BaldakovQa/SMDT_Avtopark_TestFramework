@@ -19,3 +19,28 @@ def test_archive_1st_lvl_malfunction(authorized_driver):
     page = MalFunction(authorized_driver)
     page.open_catalog_malfunction()
     page.archive_1st_lvl_malfunction()
+
+def test_archive_2nd_lvl_malfunction(authorized_driver):
+    page = MalFunction(authorized_driver)
+    page.open_catalog_malfunction()
+    page.archive_2nd_lvl_malfunction()
+
+def test_open_archive_malfunctions(authorized_driver):
+    page = MalFunction(authorized_driver)
+    page.open_catalog_malfunction()
+    page.archive_malfunction()
+
+def test_download_info_pdf(authorized_driver):
+    page = MalFunction(authorized_driver)
+    page.open_catalog_malfunction()
+    page.download_pdf()
+
+def test_download_info_excel(authorized_driver):
+    page = MalFunction(authorized_driver)
+    page.open_catalog_malfunction()
+    page.download_excel()
+
+def test_download_info_csv(authorized_driver):
+    page = MalFunction(authorized_driver)
+    page.open_catalog_malfunction()
+    page.download_csv()

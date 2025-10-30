@@ -1,4 +1,3 @@
-import random
 import time
 from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
@@ -6,13 +5,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from config import Config
 
-press_add_first_lvl_malfunction = (By.XPATH, "//button[@class='ant-btn ant-btn-primary q-directories-general-catalog-malfunction-header__left_btn']")
-press_add_second_lvl_malfunction = (By.XPATH, "//button[@class='ant-btn ant-btn-primary q-directories-general-catalog-malfunction-header__left_btn']")
+press_add_item_button = (By.XPATH, "//button[@class='ant-btn ant-btn-primary q-directories-general-checklists-header__left_btn']")
 
-class MalFunction:
+class ItemChecklists:
     def __init__(self, driver):
         self.driver = driver
-        self.driver.get(f"{Config.BASE_URL}/directories/general/catalog-malfunction")
+        self.driver.get(f"{Config.BASE_URL}/directories/general/items-checklists")
         self.wait = WebDriverWait(driver, 15)
 
     def safe_click(self, locator, retries=3):
@@ -34,42 +32,31 @@ class MalFunction:
                 print(f"⚠️ Ошибка при клике {locator}: {e}")
                 time.sleep(0.5)
 
-    def open_catalog_malfunction(self):
-        self.driver.get(f"{Config.BASE_URL}/directories/general/catalog-malfunction")
+    def open_items_checklists(self):
+        self.driver.get(f"{Config.BASE_URL}/directories/general/items-checklists")
 
-    def add_new_first_lvl_malfunction(self, mal_name=None):
-        if mal_name is None:
-            mal_name = f"Неисправность уровень 1{int(time.time())}"
+    def add_new_item(self, item=None):
+        if item is None:
+            item = f"Пункт_{int(time.time())}"
             wait = self.wait
-            wait.until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Введите наименование неисправности']"))).send_keys(mal_name)
-            wait.until(EC.presence_of_element_located((By.XPATH, "(//button[@class='ant-btn ant-btn-primary'])[2]"))).click()
-            return mal_name
+            #Название
+            wait.until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Введите название']"))).send_keys(item)
+            #Тип
+            wait.until(EC.presence_of_element_located((By.XPATH, "//input[@id='addCheckListsListItem_type']"))).click()
+            wait.until(EC.presence_of_element_located((By.XPATH, "//div[@title='ТС']//div[1]"))).click()
+            #Формат
+            wait.until(EC.presence_of_element_located((By.XPATH, "//input[@id='addCheckListsListItem_format']"))).click()
+            wait.until(EC.presence_of_element_located((By.XPATH, "//div[@title='Строковое поле']//div[1]"))).click()
+            #Добавить
+            wait.until(EC.element_to_be_clickable((By.XPATH, "(//button[@class='ant-btn ant-btn-primary'])[2]"))).click()
+            return item
 
-    def add_new_second_lvl_malfunction(self, mal2_name=None):
-        if mal2_name is None:
-            mal2_name = f"Неисправность уровень 2{int(time.time())}"
-            wait = self.wait
-            wait.until(EC.presence_of_element_located((By.XPATH,"(//div[@class='ant-tabs-tab-btn'])[2]"))).click()
-            self.safe_click(press_add_second_lvl_malfunction)
-            wait.until(EC.presence_of_element_located((By.XPATH, "(//input[@class='ant-select-selection-search-input'])[2]"))).click()
-            wait.until(EC.presence_of_element_located((By.XPATH, "//div[@class='ant-select-item-option-content']"))).click()
-            wait.until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Введите наименование неисправности']"))).send_keys(mal2_name)
-            wait.until(EC.presence_of_element_located((By.XPATH, "(//button[@class='ant-btn ant-btn-primary'])[2]"))).click()
-            return mal2_name
-
-    def archive_1st_lvl_malfunction(self):
+    def archive_item(self):
         wait = self.wait
-        wait.until(EC.element_to_be_clickable((By.XPATH, "(//button[@class='ant-btn ant-btn-default q-directories-general-catalog-malfunction-card-actions__button ant-btn-icon-only'])[3]"))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH, "(//button[@class='ant-btn ant-btn-primary'])[2]"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "(//button[@class='ant-btn ant-btn-link ant-dropdown-trigger ant-btn-icon-only'])[1]"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//ul[@role='menu']//span[contains(text(),'Архивировать')]"))).click()
 
-    def archive_2nd_lvl_malfunction(self):
-        wait = self.wait
-        wait.until(EC.element_to_be_clickable((By.XPATH, "(//div[@class='ant-tabs-tab-btn'])[2]"))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH, "(//button[@class='ant-btn ant-btn-default q-directories-general-catalog-malfunction-card-actions__button ant-btn-icon-only'])[3]"))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH, "(//button[@class='ant-btn ant-btn-primary'])[2]"))).click()
-
-
-    def archive_malfunction(self):
+    def open_archive_items(self):
         wait = self.wait
         wait.until(EC.element_to_be_clickable(
             (By.XPATH, "(//button[contains(@class,'ant-btn-primary') and contains(.,'Фильтры')])[1]"))).click()
@@ -98,3 +85,4 @@ class MalFunction:
         wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@class='ant-btn ant-btn-default q-button-export ant-dropdown-trigger']"))).click()
         wait.until(EC.element_to_be_clickable((By.XPATH, "(//span[@class='ant-dropdown-menu-title-content'])[3]"))).click()
         time.sleep(3)
+
