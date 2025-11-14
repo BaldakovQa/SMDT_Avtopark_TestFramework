@@ -50,17 +50,17 @@ class Garages:
 
         #Генерация случайного адреса
         regions = ["Приморский край"]
-        districts = ["г. Владивосток"]
-        settlements = ["г. Владивосток"]
-        streets = ["ул. Пушкина", "ул. Ленина", "ул. Гагарина", "ул. Чехова", "ул. Молодежная"]
+        #districts = ["г. Владивосток"]
+        #settlements = ["г. Владивосток"]
+        streets = ["ул. Светланская","ул. Алеутская","ул. Калинина","ул. Русская","ул. Адмирала Фокина","ул. Борисенко","ул. Луговая","ул. Баляева","ул. Верхнепортовая","ул. Нейбута","ул. Карла Либкнехта","ул. Котельникова","ул. Сабанеева","ул. Кирова","ул. Некрасовская"]
 
         region = random.choice(regions)
-        district = random.choice(districts)
-        settlement = random.choice(settlements)
+        #district = random.choice(districts)
+        #settlement = random.choice(settlements)
         street = random.choice(streets)
         house = random.randint(1, 200)
 
-        address = f"{region}, {district}, {settlement}, {street}, д. {house}"
+        address = f"{region}, {street}, д. {house}"
         #Борьба с ГАРом
         address_select = wait.until(EC.element_to_be_clickable((By.XPATH, "(//div[@class='ant-select-selector'])[1]")))
         address_select.click()
@@ -85,5 +85,15 @@ class Garages:
         wait.until(EC.presence_of_element_located((By.XPATH, "(//div[@class='ant-select-item-option-content'])[1]"))).click()
 
         #Гараж для складов
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@id='archiveGarage_garageToStorage']"))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH, "(//div[@class='ant-select-item-option-content'])[1]"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "(//div[@class='ant-col ant-form-item-control'])[3]"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "(//div[@class='ant-select-item ant-select-item-option ant-select-item-option-active'])[1]"))).click()
+
+        #Дата
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='ant-picker']"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@class='ant-picker-today-btn']"))).click()
+
+        #Причина архивации
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//textarea[@placeholder='Введите причину']"))).send_keys("Причина архивации")
+
+        #готово
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@class='ant-btn ant-btn-primary']"))).click()

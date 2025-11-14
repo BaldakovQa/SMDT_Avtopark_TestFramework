@@ -13,4 +13,3 @@ def test_archive_first_garage(authorized_driver):
     page.open_garages()
     page.safe_click(archive_first_garage)
     page.archive_first_garage()
-    time.sleep(3)
