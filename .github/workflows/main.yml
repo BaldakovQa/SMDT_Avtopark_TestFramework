@@ -1,4 +1,3 @@
-# .github/workflows/run_ui_tests.yml
 name: Run UI tests (dispatch)
 
 on:
@@ -13,6 +12,7 @@ jobs:
   ui-tests:
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.test_type == 'ui' }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,20 +28,15 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install pytest pytest-recording
 
-      - name: Install Chrome and ChromeDriver
+      - name: Install Chrome + ChromeDriver
         run: |
           sudo apt-get update
           sudo apt-get install -y unzip xvfb ffmpeg
-          # install google chrome
           wget -q -O /tmp/chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt-get install -y /tmp/chrome.deb || sudo apt --fix-broken install -y
           CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d. -f1,2)
-          echo "Chrome version: $CHROME_VERSION"
-          # install matching chromedriver (best-effort using chromedriver storage)
           LATEST=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION || true)
-          if [ -z "$LATEST" ]; then
-            LATEST=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)
-          fi
+          [ -z "$LATEST" ] && LATEST=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)
           wget -q -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/$LATEST/chromedriver_linux64.zip"
           unzip -qq /tmp/chromedriver.zip -d /tmp
           sudo mv /tmp/chromedriver /usr/local/bin/chromedriver
@@ -51,40 +46,4 @@ jobs:
         env:
           DISPLAY: :99
         run: |
-          export DISPLAY=:99
-          Xvfb :99 -screen 0 1920x1080x24 >/tmp/xvfb.log 2>&1 &
-          sleep 2
-          # start ffmpeg recording of display (background)
-          ffmpeg -y -video_size 1920x1080 -framerate 15 -f x11grab -i :99 -codec:v libx264 -preset ultrafast /tmp/session.mp4 >/tmp/ffmpeg.log 2>&1 &
-          echo "Recording started"
-
-      - name: Run pytest (UI tests)
-        env:
-          DISPLAY: :99
-        run: |
-          # Папка для скриншотов
-          mkdir -p artifacts/screenshots
-          # Запуск pytest: предполагаем, что UI-тесты находятся в tests/ и используют selenium
-          pytest tests -k "ui or UI or browser" --maxfail=1 -q || true
-          # Соберём логи в artefacts
-          cp -r test-results artifacts/ 2>/dev/null || true
-
-      - name: Stop recording
-        run: |
-          # убиваем ffmpeg и Xvfb
-          pkill -f ffmpeg || true
-          pkill -f Xvfb || true
-          ls -la /tmp
-          mv /tmp/session.mp4 ./artifacts/ || true
-
-      - name: Zip artifacts
-        run: |
-          mkdir -p artifacts
-          ls -la artifacts || true
-          zip -r artifacts.zip artifacts || true
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ui-test-artifacts
-          path: artifacts.zip
+          export DISPLAY
