@@ -1,12 +1,17 @@
-name: Run UI Tests
+# .github/workflows/run_tests.yml
+name: Run tests (dispatch)
 
 on:
   workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of tests to run'
+        required: true
+        default: 'ui'
 
 jobs:
-  ui-tests:
+  run-tests:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -19,9 +24,19 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install pytest selenium
 
       - name: Run tests
+        env:
+          DISPLAY: :99
         run: |
-          pytest -q
+          echo "Запуск тестов типа: ${{ github.event.inputs.test_type }}"
+          if [ "${{ github.event.inputs.test_type }}" = "ui" ]; then
+            pytest tests --maxfail=1 -q
+          elif [ "${{ github.event.inputs.test_type }}" = "api" ]; then
+            pytest tests/api --maxfail=1 -q
+          else
+            echo "Неизвестный тип тестов: ${{ github.event.inputs.test_type }}"
+            exit 1
+          fi
