@@ -1,20 +1,14 @@
-name: Run UI tests (dispatch)
+name: Run UI Tests
 
 on:
   workflow_dispatch:
-    inputs:
-      test_type:
-        description: 'Type of tests to run'
-        required: true
-        default: 'ui'
 
 jobs:
   ui-tests:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.test_type == 'ui' }}
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Python
@@ -25,37 +19,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pytest pytest-recording chromedriver-autoinstaller
+          pip install -r requirements.txt
+          pip install pytest selenium
 
-      - name: Install Chromium dependencies
+      - name: Run tests
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg xvfb
-
-      - name: Install Google Chrome (official repo)
-        run: |
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-linux-signing-keyring.gpg
-          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
-          google-chrome --version
-
-      - name: Install chromedriver via chromedriver-autoinstaller
-        run: |
-          python -c "import chromedriver_autoinstaller; chromedriver_autoinstaller.install(); import shutil; shutil.copyfile(chromedriver_autoinstaller.utils.get_chromedriver_path(), '/usr/local/bin/chromedriver')"
-          chromedriver --version
-
-      - name: Start virtual display
-        env:
-          DISPLAY: :99
-        run: |
-          export DISPLAY
-          Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
-          sleep 3
-
-      - name: Run tests (NOT headless)
-        env:
-          DISPLAY: :99
-        run: |
-          pytest --maxfail=1 --disable-warnings -v
+          pytest -q
