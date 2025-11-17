@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       test_type:
-        description: 'Type of tests to run'
+        description: 'Type of tests to run (ui/api)'
         required: true
         default: 'ui'
 
@@ -28,8 +28,6 @@ jobs:
           pip install pytest selenium
 
       - name: Run tests
-        env:
-          DISPLAY: :99
         run: |
           echo "Запуск тестов типа: ${{ github.event.inputs.test_type }}"
           if [ "${{ github.event.inputs.test_type }}" = "ui" ]; then
